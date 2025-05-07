@@ -1,0 +1,109 @@
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gerçek Burcunu Hesapla</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .container {
+      background-color: white;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+    input[type="date"] {
+      padding: 0.5rem;
+      font-size: 1rem;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+    button {
+      margin-top: 1rem;
+      padding: 0.5rem 1rem;
+      font-size: 1rem;
+      border: none;
+      border-radius: 6px;
+      background-color: #007bff;
+      color: white;
+      cursor: pointer;
+    }
+    .result {
+      margin-top: 1.5rem;
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Gerçek Burcunu Hesapla (NASA Takvimine Göre)</h2>
+    <input type="date" id="birthDate" />
+    <br />
+    <button onclick="calculateZodiac()">Burcumu Göster</button>
+    <div class="result" id="result"></div>
+  </div>
+
+  <script>
+    function calculateZodiac() {
+      const date = new Date(document.getElementById('birthDate').value);
+      if (isNaN(date)) {
+        document.getElementById('result').textContent = "Lütfen geçerli bir tarih giriniz.";
+        return;
+      }
+
+      const day = date.getDate();
+      const month = date.getMonth() + 1;
+
+      const zodiacRanges = [
+        [{m:1, d:20}, {m:2, d:16}, "Oğlak"],
+        [{m:2, d:17}, {m:3, d:11}, "Kova"],
+        [{m:3, d:12}, {m:4, d:18}, "Balık"],
+        [{m:4, d:19}, {m:5, d:13}, "Koç"],
+        [{m:5, d:14}, {m:6, d:21}, "Boğa"],
+        [{m:6, d:22}, {m:7, d:20}, "İkizler"],
+        [{m:7, d:21}, {m:8, d:10}, "Yengeç"],
+        [{m:8, d:11}, {m:9, d:16}, "Aslan"],
+        [{m:9, d:17}, {m:10, d:30}, "Başak"],
+        [{m:10, d:31}, {m:11, d:23}, "Terazi"],
+        [{m:11, d:24}, {m:11, d:28}, "Akrep"],
+        [{m:11, d:29}, {m:12, d:17}, "Yılan (Ophiuchus)"],
+        [{m:12, d:18}, {m:1, d:19}, "Yay"]
+      ];
+
+      let zodiac = "Geçersiz tarih";
+
+      for (let [start, end, sign] of zodiacRanges) {
+        const s = new Date(2000, start.m - 1, start.d);
+        const e = new Date(2000, end.m - 1, end.d);
+        const t = new Date(2000, month - 1, day);
+        if (s <= e) {
+          if (t >= s && t <= e) {
+            zodiac = sign;
+            break;
+          }
+        } else {
+          if (t >= s || t <= e) {
+            zodiac = sign;
+            break;
+          }
+        }
+      }
+
+      document.getElementById('result').textContent = `Gerçek burcun: ${zodiac}`;
+    }
+  </script>
+</body>
+</html>
